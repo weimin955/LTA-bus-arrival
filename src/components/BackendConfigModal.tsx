@@ -34,8 +34,8 @@ export const BackendConfigModal: React.FC<BackendConfigModalProps> = ({
     setTestMessage('Pinging backend endpoint...');
 
     try {
-      const url = new URL(config.customApiUrl);
-      url.searchParams.set('BusStopCode', '08057');
+      const url = new URL(config.customApiUrl, window.location.origin);
+      url.searchParams.set('BusStopCode', '83139');
       const headers: Record<string, string> = { Accept: 'application/json' };
       if (config.customApiKey) {
         headers['AccountKey'] = config.customApiKey;
@@ -141,15 +141,24 @@ export const BackendConfigModal: React.FC<BackendConfigModalProps> = ({
           {config.backendMode === 'custom_api' && (
             <div className="space-y-4 pt-2 border-t border-slate-100">
               <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">
-                  Backend API Endpoint URL
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-semibold text-slate-700">
+                    Backend API Endpoint URL
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setConfig({ ...config, customApiUrl: '/apit/busarrival' })}
+                    className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 underline cursor-pointer"
+                  >
+                    Use /apit/busarrival (Serverless)
+                  </button>
+                </div>
                 <input
-                  type="url"
-                  placeholder="e.g. http://localhost:3000/api/bus-arrivals or https://api.mybackend.com/arrivals"
+                  type="text"
+                  placeholder="e.g. /apit/busarrival or http://localhost:3000/apit/busarrival"
                   value={config.customApiUrl}
                   onChange={(e) => setConfig({ ...config, customApiUrl: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
+                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white font-mono"
                 />
                 <span className="text-[11px] text-slate-500 mt-1 block">
                   The frontend appends <code className="bg-slate-100 px-1 py-0.5 rounded">?BusStopCode=[code]</code> to your endpoint.

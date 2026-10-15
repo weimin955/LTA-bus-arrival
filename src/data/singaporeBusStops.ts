@@ -243,6 +243,16 @@ export const SINGAPORE_BUS_STOPS: BusStop[] = [
     mrtHub: 'Bedok (EW5)',
     services: ['2', '9', '24', '28', '31', '35', '67', '137', '155', '222'],
   },
+  {
+    code: '83139',
+    roadName: 'Upp East Coast Rd',
+    description: 'The Summit',
+    lat: 1.317412,
+    lng: 103.938921,
+    region: 'East',
+    mrtHub: 'Bayshore / Bedok South',
+    services: ['10', '13', '14', '43', '48', '137', '506', '853M'],
+  },
 
   // --- Bishan Hub (Central) ---
   {

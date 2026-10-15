@@ -5,7 +5,41 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: 'serverless-apit-routes',
+        configureServer(server) {
+          server.middlewares.use(async (req, res, next) => {
+            const url = new URL(req.url || '', 'http://localhost');
+            if (url.pathname === '/apit/health' || url.pathname === '/api/health') {
+              try {
+                const { default: handler } = await server.ssrLoadModule('/apit/health.ts');
+                await handler(req, res);
+                return;
+              } catch (err: any) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: err.message }));
+                return;
+              }
+            }
+            if (url.pathname === '/apit/busarrival' || url.pathname === '/api/busarrival') {
+              try {
+                const { default: handler } = await server.ssrLoadModule('/apit/busarrival.ts');
+                await handler(req, res);
+                return;
+              } catch (err: any) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: err.message }));
+                return;
+              }
+            }
+            next();
+          });
+        },
+      },
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

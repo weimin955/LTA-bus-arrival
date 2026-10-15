@@ -192,7 +192,7 @@ export class LTABusService {
     // If custom API is configured and enabled:
     if (config.backendMode === 'custom_api' && config.customApiUrl) {
       try {
-        const url = new URL(config.customApiUrl);
+        const url = new URL(config.customApiUrl, window.location.origin);
         url.searchParams.set('BusStopCode', busStopCode);
         const headers: Record<string, string> = {
           Accept: 'application/json',
